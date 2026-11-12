@@ -120,11 +120,11 @@ export function Info({ n, wa }) {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-5">
                 {n.direccion && (
-                  <p className="flex gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-vino-50 text-vino-800"><MapPin size={20} /></span><span className="pt-2">{n.direccion}</span></p>
+                  <p className="flex gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-vino-800 text-oro-300"><MapPin size={20} /></span><span className="pt-2">{n.direccion}</span></p>
                 )}
                 {n.horarios.length > 0 && (
                   <div className="flex gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-vino-50 text-vino-800"><Clock size={20} /></span>
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-vino-800 text-oro-300"><Clock size={20} /></span>
                     <ul className="space-y-1 pt-2 text-sm">{n.horarios.map(([d, h]) => <li key={d}><b>{d}:</b> {h}</li>)}</ul>
                   </div>
                 )}
@@ -136,7 +136,7 @@ export function Info({ n, wa }) {
                   </div>
                 )}
               </div>
-              {n.mapa && <iframe src={n.mapa} title="Mapa" loading="lazy" className="h-72 w-full rounded-3xl border-0 shadow-card" />}
+              {n.mapa && <iframe src={n.mapa} title="Mapa" loading="lazy" className="h-72 w-full rounded-2xl border-0 shadow-card ring-1 ring-oro-400/30" />}
             </div>
           </div>
         </section>

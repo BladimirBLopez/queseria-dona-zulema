@@ -111,7 +111,7 @@ export default async function Home() {
       <Beneficios n={N} />
       <Info n={N} wa={wa} />
 
-      <footer className="bg-vino-950 pb-24 pt-12 text-center text-vino-100">
+      <footer className="border-t-2 border-oro-400/50 bg-vino-950 pb-24 pt-12 text-center text-vino-100">
         <Marca N={N} big horizontal />
         {N.slogan && <p className="mt-1 text-sm text-vino-200">{N.slogan}</p>}
         <a href={pedido} className="mt-5 inline-flex items-center gap-2 rounded-full bg-green-500 px-6 py-2.5 font-bold text-white">

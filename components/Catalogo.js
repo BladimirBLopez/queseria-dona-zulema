@@ -277,7 +277,7 @@ export default function Catalogo({ productos, wa, qr = '' }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Buscar queso, jamón, yogur..."
-              className="w-full rounded-2xl border-0 bg-white py-3.5 pl-11 pr-4 text-sm shadow-card outline-none ring-1 ring-stone-200 focus:ring-2 focus:ring-vino-500"
+              className="w-full rounded-2xl border-0 bg-white py-3.5 pl-11 pr-4 text-sm shadow-card outline-none ring-1 ring-stone-200 focus:ring-2 focus:ring-oro-400"
             />
           </div>
           <div className="no-scrollbar flex gap-2 overflow-x-auto">
