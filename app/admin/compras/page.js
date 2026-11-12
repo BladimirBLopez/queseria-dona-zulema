@@ -9,7 +9,7 @@ import { admiteDecimales } from '@/lib/unidades';
 import Escaner from '@/components/Escaner';
 
 const MET = { efectivo: 'Efectivo', qr: 'QR', transferencia: 'Transferencia', otro: 'Otro' };
-const METODOS = [['caja', 'Efectivo de la caja'], ['transferencia', 'QR o transferencia'], ['otro', 'Otro (no sale de la caja)']];
+const METODOS = [['caja', 'Efectivo de la caja'], ['transferencia', 'QR o transferencia'], ['otro', 'De mi bolsillo (no toca la caja)']];
 const n = (v) => Number(v) || 0;
 const r2 = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
 const r3 = (x) => Math.round(x * 1000) / 1000;
@@ -74,7 +74,7 @@ function AvisoCosto({ l, unit }) {
     const d = r2(unit - ant);
     if (Math.abs(d) >= 0.01) {
       const pct = Math.round((Math.abs(d) / ant) * 100);
-      avisos.push([d > 0 ? 'text-amber-700' : 'text-green-700', (d > 0 ? 'Sube ' : 'Baja ') + bs(Math.abs(d)) + ' (' + pct + '%) frente al costo anterior']);
+      avisos.push([d > 0 ? 'text-amber-700' : 'text-green-700', 'Ahora te cuesta ' + bs(Math.abs(d)) + (d > 0 ? ' más (' + pct + '% más caro)' : ' menos (' + pct + '% más barato)')]);
     }
   }
   for (const [nombre, precio] of [['menor', l.pmenor], ['mayor', l.pmayor]]) {
@@ -82,10 +82,11 @@ function AvisoCosto({ l, unit }) {
     if (!(p > 0)) continue;
     const gana = r2(p - unit);
     const pct = Math.round((gana / p) * 100);
-    const x = '/' + l.unidad;
-    if (gana < -0.004) avisos.push(['font-bold text-red-600', 'Por ' + nombre + ': pierdes ' + bs(-gana) + x]);
-    else if (gana < 0.005) avisos.push(['font-bold text-red-600', 'Por ' + nombre + ': no ganas nada']);
-    else avisos.push([pct < MARGEN_BAJO ? 'text-amber-700' : 'text-stone-500', 'Por ' + nombre + ': ganas ' + bs(gana) + x + ' (' + pct + '%)' + (pct < MARGEN_BAJO ? ' · poco' : '')]);
+    const x = ' por cada ' + l.unidad;
+    const venta = 'Si lo vendes a ' + bs(p) + (nombre === 'mayor' ? ' (por mayor)' : '');
+    if (gana < -0.004) avisos.push(['font-bold text-red-600', venta + ': pierdes ' + bs(-gana) + x + '. Sube el precio']);
+    else if (gana < 0.005) avisos.push(['font-bold text-red-600', venta + ': no ganas nada. Sube el precio']);
+    else avisos.push([pct < MARGEN_BAJO ? 'text-amber-700' : 'text-stone-500', venta + ': ganas ' + bs(gana) + x + ' (' + pct + '%)' + (pct < MARGEN_BAJO ? ' · ganancia baja' : '')]);
   }
   if (!avisos.length) return null;
   return (
@@ -235,7 +236,7 @@ function NuevaCompra({ onCerrar, onListo }) {
               <button type="button" onClick={() => setNuevoProv({ nombre: '', telefono: '' })} className="text-xs font-bold text-vino-800 underline">Nuevo proveedor</button>
             )}
 
-            <p className="text-xs font-semibold text-stone-500">¿De dónde salió la plata?</p>
+            <p className="text-xs font-semibold text-stone-500">¿Con qué pagaste?</p>
             <div className="grid grid-cols-1 gap-2">
               {METODOS.map(([v, t]) => (
                 <button key={v} type="button" onClick={() => setMetodo(v)} className={`rounded-xl py-2.5 text-sm font-semibold ${metodo === v ? 'bg-vino-800 text-white' : 'bg-stone-100 text-stone-700'}`}>{t}</button>
@@ -274,20 +275,20 @@ function NuevaCompra({ onCerrar, onListo }) {
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className="truncate font-semibold">{l.nombre}</p>
-                        {l.actual != null && <p className="text-xs text-stone-500">{'Costo actual ' + bs(l.actual) + '/' + l.unidad}</p>}
+                        {l.actual != null && <p className="text-xs text-stone-500">{'Antes te costaba ' + bs(l.actual) + ' cada ' + l.unidad}</p>}
                         <AvisoCosto l={l} unit={unit} />
                       </div>
                       <button type="button" onClick={() => quitar(l.id)} aria-label="Quitar" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-red-50 text-red-600"><Trash2 size={15} /></button>
                     </div>
                     <div className="mt-2 grid grid-cols-3 gap-2">
-                      <label className="text-[11px] text-stone-500">{'Cantidad (' + l.unidad + ')'}
+                      <label className="text-[11px] text-stone-500">{'¿Cuántos compraste? (' + l.unidad + ')'}
                         <input type="number" inputMode={dec ? 'decimal' : 'numeric'} step={dec ? 'any' : '1'} min="0" placeholder="0" value={l.cantidad} onChange={(e) => cambiar(l.id, 'cantidad', e.target.value)} />
                       </label>
-                      <label className="text-[11px] text-stone-500">Total pagado Bs
+                      <label className="text-[11px] text-stone-500">¿Cuánto pagaste en total? (Bs)
                         <input type="number" inputMode="decimal" step="0.01" min="0" placeholder="0.00" value={l.total} onChange={(e) => cambiar(l.id, 'total', e.target.value)} />
                       </label>
                       <div className="text-right">
-                        <p className="text-[11px] text-stone-500">Te cuesta</p>
+                        <p className="text-[11px] text-stone-500">Cada uno te cuesta</p>
                         <p className="pt-2 font-extrabold text-stone-900">{unit == null ? '—' : bs(unit) + '/' + l.unidad}</p>
                       </div>
                     </div>
@@ -302,6 +303,7 @@ function NuevaCompra({ onCerrar, onListo }) {
 
           <div className="space-y-2 border-t border-stone-100 p-4">
             {err && <p className="text-center text-sm font-semibold text-red-600">{err}</p>}
+            {lineas.length > 0 && <p className="text-center text-xs text-stone-500">{'Se suma al stock lo que compraste y se registran ' + bs(total) + ' de compra'}</p>}
             <button type="button" onClick={guardar} disabled={busy || !lineas.length} className="w-full rounded-full bg-vino-800 py-4 text-base font-bold text-white disabled:opacity-50">
               {busy ? 'Guardando...' : 'Guardar compra · ' + bs(total)}
             </button>
