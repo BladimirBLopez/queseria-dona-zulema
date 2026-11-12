@@ -61,7 +61,7 @@ export default async function Home() {
           <a href="#" className="flex min-w-0 items-center justify-center">
             <Marca N={N} horizontal />
           </a>
-          <a href={pedido} aria-label="Escribir por WhatsApp" className="grid h-10 w-10 place-items-center rounded-full bg-green-500 shadow transition hover:bg-green-600">
+          <a href={pedido} aria-label="Escribir por WhatsApp" className="hidden">
             <WhatsApp size={20} />
           </a>
         </div>
@@ -71,7 +71,7 @@ export default async function Home() {
         {N.hero && (
           <>
             <img src={N.hero.replace('/upload/', '/upload/f_auto,q_auto,w_1600/')} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-vino-950/80 via-vino-950/60 to-vino-950/90" />
+            <div className="absolute inset-0 bg-gradient-to-b from-vino-950/80 via-vino-950/80 to-vino-950/90" />
           </>
         )}
         
@@ -90,7 +90,7 @@ export default async function Home() {
                   <MapPin size={20} /> Cómo llegar
                 </a>
               )}
-              <a href={pedido} className="flex items-center gap-2 text-sm font-semibold text-oro-200 underline-offset-4 hover:underline">
+              <a href={pedido} className="hidden">
                 <WhatsApp size={20} /> Pedir por WhatsApp
               </a>
             </div>
