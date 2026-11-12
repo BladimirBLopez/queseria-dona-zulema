@@ -8,7 +8,7 @@ module.exports = {
         vino: { 50: '#fdf3f2', 100: '#fbe3e0', 200: '#f6c7c2', 300: '#ee9f98', 400: '#e1695f', 500: '#cf4237', 600: '#b02c26', 700: '#8f1f1f', 800: '#7a1414', 900: '#5e0d0d', 950: '#3b0909' },
         oro: { 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
         crema: { DEFAULT: '#fbf6ec', 100: '#f5ecd9' },
-        panel: { DEFAULT: '#f4f5f7', 100: '#eceef1' },
+        panel: { DEFAULT: '#fbf6ec', 100: '#f5ecd9' },
       },
       fontFamily: {
         serif: ['var(--font-serif)', 'Georgia', 'serif'],

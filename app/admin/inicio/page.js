@@ -79,11 +79,11 @@ export default function Inicio() {
 
       {d && (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 text-stone-900 md:p-6">
+          <div className="rounded-2xl border-2 border-oro-400/60 bg-vino-950 p-5 text-white shadow-lift md:p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm text-stone-500">Vendido hoy</p>
-                <p className="mt-1 text-4xl font-extrabold md:text-5xl">{bs(hoy.total)}</p>
+                <p className="text-sm font-semibold text-vino-200">Vendido hoy</p>
+                <p className="mt-1 font-serif text-4xl font-extrabold text-oro-300 md:text-5xl">{bs(hoy.total)}</p>
               </div>
               {delta !== null && (
                 <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold ${delta >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
@@ -93,12 +93,12 @@ export default function Inicio() {
               )}
             </div>
             <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-xl bg-panel p-3">
-                <p className="text-stone-500">Ventas</p>
+              <div className="rounded-xl bg-white/10 p-3">
+                <p className="text-vino-200">Ventas</p>
                 <p className="text-xl font-bold">{hoy.n}</p>
               </div>
-              <div className="rounded-xl bg-panel p-3">
-                <p className="text-stone-500">Ganancia</p>
+              <div className="rounded-xl bg-white/10 p-3">
+                <p className="text-vino-200">Ganancia</p>
                 <p className="text-xl font-bold">{sinCosto ? '—' : bs(hoy.ganancia)}</p>
               </div>
             </div>
