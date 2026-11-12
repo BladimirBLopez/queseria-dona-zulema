@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { Menu as MenuIcon, X } from 'lucide-react';
 import WhatsApp from '@/components/WhatsApp';
 
-export default function Menu({ items, pedido }) {
+export default function Menu({ items, pedido, marca }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && setOpen(false);
@@ -23,6 +23,7 @@ export default function Menu({ items, pedido }) {
             <button onClick={() => setOpen(false)} aria-label="Cerrar menú" className="mb-6 grid h-10 w-10 place-items-center rounded-full hover:bg-white/10">
               <X size={22} />
             </button>
+            {marca && <div className="mb-5 border-b border-oro-400/30 pb-5">{marca}</div>}
             <ul className="space-y-1">
               {items.map(([t, h]) => (
                 <li key={h}>

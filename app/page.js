@@ -54,10 +54,10 @@ export default async function Home() {
 
   return (
     <>
-      <div className="bg-vino-900 px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-oro-300">Venta al por mayor y menor · Pedidos por WhatsApp</div>
+      <div className="bg-vino-900 px-4 py-1.5 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-oro-300">Mayor y menor · Pedidos por WhatsApp</div>
       <header className="sticky top-0 z-30 border-b border-oro-400/30 bg-vino-950/95 text-white backdrop-blur">
         <div className="mx-auto grid h-16 max-w-6xl grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 px-4">
-          <Menu items={menu} pedido={pedido} />
+          <Menu items={menu} pedido={pedido} marca={<Marca N={N} horizontal />} />
           <a href="#" className="flex min-w-0 items-center justify-center">
             <Marca N={N} horizontal />
           </a>
@@ -76,7 +76,7 @@ export default async function Home() {
         )}
         
         
-        <div className="relative mx-auto max-w-4xl px-4 pb-16 pt-14 text-center md:pt-24">
+        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-10 text-center md:pt-24">
           <Reveal>
             {N.slogan && (
               <span className="inline-block rounded-full border border-oro-300/40 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-oro-300">{N.slogan}</span>
@@ -90,11 +90,11 @@ export default async function Home() {
                   <MapPin size={20} /> Cómo llegar
                 </a>
               )}
-              <a href={pedido} className="flex items-center gap-2 rounded-full border border-oro-300/50 px-8 py-3.5 font-semibold text-white transition hover:bg-white/10">
+              <a href={pedido} className="flex items-center gap-2 text-sm font-semibold text-oro-200 underline-offset-4 hover:underline">
                 <WhatsApp size={20} /> Pedir por WhatsApp
               </a>
             </div>
-            <ul className="mx-auto mt-12 grid max-w-sm grid-cols-2 divide-x divide-oro-300/30 border-y border-oro-300/30 py-4 text-sm text-oro-200">
+            <ul className="mx-auto mt-8 grid max-w-sm grid-cols-2 divide-x divide-oro-300/30 border-y border-oro-300/30 py-4 text-sm text-oro-200">
               <li className="flex items-center justify-center gap-2"><Scale size={16} /> Mayor y menor</li>
               <li className="flex items-center justify-center gap-2"><Snowflake size={16} /> Cadena de frío</li>
               
