@@ -80,23 +80,23 @@ export default async function Home() {
             {N.slogan && (
               <span className="inline-block rounded-full border border-oro-300/40 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-oro-300">{N.slogan}</span>
             )}
-            <h1 className="mt-6 font-serif text-4xl font-extrabold leading-[1.1] md:text-6xl">{N.titulo}</h1>
+            <h1 className="mt-6 font-serif text-[2.4rem] font-extrabold leading-[1.1] tracking-tight [text-wrap:balance] md:text-6xl">{N.titulo}</h1>
             {N.subtitulo && <p className="mx-auto mt-5 max-w-xl text-lg text-vino-100">{N.subtitulo}</p>}
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a href="#catalogo" className="rounded-full bg-oro-400 px-8 py-3.5 font-bold text-vino-950 shadow-lift transition hover:bg-oro-300">Ver catálogo</a>
               {(N.direccion || N.mapa || N.ubicacion) && (
-                <a href="#visitanos" className="flex items-center gap-2 rounded-full border border-white/30 px-8 py-3.5 font-semibold transition hover:bg-white/10">
+                <a href="#visitanos" className="flex items-center gap-2 text-sm font-semibold text-oro-200 underline-offset-4 hover:underline">
                   <MapPin size={20} /> Cómo llegar
                 </a>
               )}
-              <a href={pedido} className="flex items-center gap-2 rounded-full border border-white/30 px-8 py-3.5 font-semibold transition hover:bg-white/10">
+              <a href={pedido} className="flex items-center gap-2 rounded-full bg-green-500 px-8 py-3.5 font-bold text-white shadow-lift transition hover:bg-green-600">
                 <WhatsApp size={20} /> Pedir por WhatsApp
               </a>
             </div>
-            <ul className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-oro-200">
+            <ul className="mx-auto mt-10 flex max-w-md flex-wrap justify-center gap-x-6 gap-y-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm text-oro-200 backdrop-blur">
               <li className="flex items-center gap-2"><Scale size={16} /> Mayor y menor</li>
               <li className="flex items-center gap-2"><Snowflake size={16} /> Cadena de frío</li>
-              <li className="flex items-center gap-2"><WhatsApp size={16} /> Pedidos por WhatsApp</li>
+              
             </ul>
           </Reveal>
         </div>
