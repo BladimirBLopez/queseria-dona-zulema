@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LockKeyhole, UserRound } from 'lucide-react';
+import { Eye, EyeOff, LockKeyhole, UserRound } from 'lucide-react';
 import { rutaInicialAdmin } from '@/lib/rutas-admin';
 
 export default function AccesoIndividual() {
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
+  const [ver, setVer] = useState(false);
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState('');
 
@@ -48,6 +49,13 @@ export default function AccesoIndividual() {
 
     if (ocupado) return;
 
+    const nombre = usuario.trim().toLowerCase();
+
+    if (nombre.length < 3 || !clave) {
+      setError('Escribe tu usuario y tu contraseña.');
+      return;
+    }
+
     setOcupado(true);
     setError('');
 
@@ -61,7 +69,7 @@ export default function AccesoIndividual() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            usuario,
+            usuario: nombre,
             clave
           })
         }
@@ -72,15 +80,18 @@ export default function AccesoIndividual() {
       if (!respuesta.ok) {
         const mensaje = {
           credenciales_invalidas:
-            'Usuario o contraseña incorrectos.',
+            'Usuario o clave incorrectos.',
           demasiados_intentos:
-            'Demasiados intentos. Intenta más tarde.',
+            'Demasiados intentos, espera unos minutos.',
           origen_invalido:
             'Solicitud no autorizada.'
         };
 
         throw new Error(
           mensaje[datos.error] ||
+          (respuesta.status === 429
+            ? 'Demasiados intentos, espera unos minutos.'
+            : null) ||
           'No se pudo iniciar sesión (HTTP ' + respuesta.status + ').'
         );
       }
@@ -126,19 +137,19 @@ export default function AccesoIndividual() {
     <main className="grid min-h-[80vh] place-items-center p-4">
       <form
         onSubmit={ingresar}
-        className="w-full max-w-sm space-y-5 rounded-3xl bg-white p-7 shadow-lg"
+        className="w-full max-w-sm space-y-5 rounded-3xl border-t-4 border-oro-400 bg-white p-7 shadow-lg"
       >
         <div className="text-center">
-          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-vino-100 text-vino-800">
+          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-oro-200 text-vino-800">
             <LockKeyhole size={30} />
           </div>
 
-          <h1 className="text-2xl font-extrabold text-vino-800">
+          <h1 className="text-3xl font-extrabold text-vino-800" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             Doña Zulema
           </h1>
 
           <p className="mt-2 text-sm text-stone-500">
-            Acceso individual al sistema
+            Quesería y Fiambrería · Acceso al sistema
           </p>
         </div>
 
@@ -151,10 +162,13 @@ export default function AccesoIndividual() {
           <input
             type="text"
             value={usuario}
-            onChange={e => setUsuario(e.target.value)}
+            onChange={e => setUsuario(e.target.value.replace(/\s/g, '').toLowerCase())}
             required
             maxLength={60}
             autoComplete="username"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             className="w-full rounded-xl border border-stone-300 p-3"
           />
         </label>
@@ -165,14 +179,27 @@ export default function AccesoIndividual() {
           </span>
 
           <input
-            type="password"
+            type={ver ? 'text' : 'password'}
             value={clave}
             onChange={e => setClave(e.target.value)}
             required
             autoComplete="current-password"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            maxLength={128}
             className="w-full rounded-xl border border-stone-300 p-3"
           />
         </label>
+
+        <button
+          type="button"
+          onClick={() => setVer(v => !v)}
+          className="-mt-2 flex items-center gap-2 text-sm font-semibold text-vino-800"
+        >
+          {ver ? <EyeOff size={18} /> : <Eye size={18} />}
+          {ver ? 'Ocultar contraseña' : 'Ver contraseña'}
+        </button>
 
         {error && (
           <p
@@ -186,9 +213,9 @@ export default function AccesoIndividual() {
         <button
           type="submit"
           disabled={ocupado}
-          className="w-full rounded-xl bg-vino-800 px-4 py-3 font-bold text-white disabled:opacity-50"
+          className="w-full rounded-xl bg-vino-800 px-4 py-3 font-bold text-white hover:bg-vino-900 disabled:opacity-50"
         >
-          {ocupado ? 'Ingresando...' : 'Iniciar sesión'}
+          {ocupado ? 'Entrando...' : 'Entrar'}
         </button>
 
         <p className="text-center text-xs text-stone-500">
