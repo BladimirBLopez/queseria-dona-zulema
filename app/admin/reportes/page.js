@@ -104,9 +104,9 @@ export default function Reportes() {
         <>
           <div className="grid grid-cols-2 gap-3">
             <Tarjeta t="Vendido" v={bs(r.total)} c="text-green-700" sub={r.n + (r.n === 1 ? ' venta' : ' ventas')} />
-            <Tarjeta t="Ganancia" v={bs(r.ganancia)} c="text-vino-800" sub="antes de gastos" />
+            <Tarjeta t="Ganancia" v={bs(r.ganancia)} c="text-vino-800" sub="sin descontar tus gastos" />
             <Tarjeta t="Gastos" v={bs(r.gastos)} c="text-amber-700" />
-            <Tarjeta t="Ganancia neta" v={bs(r.neta)} c={r.neta < 0 ? 'text-red-600' : 'text-green-700'} sub="ganancia − gastos" />
+            <Tarjeta t="Ganancia final" v={bs(r.neta)} c={r.neta < 0 ? 'text-red-600' : 'text-green-700'} sub="lo que ganas menos tus gastos" />
           </div>
 
           {r.sin_costo > 0 && (
