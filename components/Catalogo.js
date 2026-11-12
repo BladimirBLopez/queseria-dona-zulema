@@ -78,12 +78,13 @@ function Card({ p, qty, onAdd }) {
   );
 }
 
-export default function Catalogo({ productos, wa }) {
+export default function Catalogo({ productos, wa, qr = '' }) {
   const [q, setQ] = useState('');
   const [linea, setLinea] = useState('all');
   const [cat, setCat] = useState('all');
   const [precioMax, setPrecioMax] = useState('todos');
   const [orden, setOrden] = useState('catalogo');
+  const [pagoQr, setPagoQr] = useState(false);
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const [cart, setCart] = useState({});
   const [open, setOpen] = useState(false);
@@ -238,6 +239,7 @@ export default function Catalogo({ productos, wa }) {
       `Nota: ${nota.trim()}`,
     ] : []),
     '',
+    ...(qr && pagoQr ? ['Voy a pagar por QR. Les envío el comprobante por aquí.', ''] : []),
     '¿Me confirman la disponibilidad? Gracias.',
   ].join('\n');
   const link = `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`;
@@ -544,6 +546,21 @@ export default function Catalogo({ productos, wa }) {
                   ? 'Los productos sin precio no se incluyen en el total parcial.'
                   : 'El precio final se confirma por WhatsApp.'}
               </p>
+
+              {qr && (
+                <div className="mt-4 rounded-2xl bg-oro-200/40 p-3 ring-1 ring-oro-400/40">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-vino-800">
+                    <input type="checkbox" checked={pagoQr} onChange={(e) => setPagoQr(e.target.checked)} className="h-4 w-4" />
+                    Quiero pagar por QR
+                  </label>
+                  {pagoQr && (
+                    <div className="mt-3 text-center">
+                      <img src={qr.replace('/upload/', '/upload/f_auto,q_auto,w_600/')} alt="QR de pago" className="mx-auto w-56 max-w-full rounded-xl bg-white p-2" />
+                      <p className="mt-2 text-xs text-stone-600">Escanea con la app de tu banco. El monto final te lo confirmamos por WhatsApp; envíanos ahí el comprobante.</p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <a href={link} onClick={guardarPedido} target="_blank" rel="noopener noreferrer"
                 className="mt-4 flex items-center justify-center gap-2 rounded-full bg-green-500 py-3.5 font-bold text-white shadow-lg transition hover:bg-green-600">

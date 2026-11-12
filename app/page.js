@@ -107,7 +107,7 @@ export default async function Home() {
 
       <JsonLd n={N} />
       <Ofertas banners={banners} wa={N.whatsapp} />
-      <Catalogo productos={productos} wa={N.whatsapp} />
+      <Catalogo productos={productos} wa={N.whatsapp} qr={N.qr || ''} />
       <Beneficios n={N} />
       <Info n={N} wa={wa} />
 

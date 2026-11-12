@@ -18,7 +18,7 @@ const REDES = [
 ];
 
 const pad = (t) => { const [h, m] = t.split(':'); return h.padStart(2, '0') + ':' + m; };
-const norm = (d) => ({ ...d, logo: d.logo || '', hero: d.hero || '', horarios: d.horarios || [], faq: d.faq || [], marcas: d.marcas || [] });
+const norm = (d) => ({ ...d, logo: d.logo || '', hero: d.hero || '', qr: d.qr || '', horarios: d.horarios || [], faq: d.faq || [], marcas: d.marcas || [] });
 const digitos = (v) => String(v || '').replace(/\D/g, '');
 const waFinal = (v) => { const d = digitos(v); return d.length === 8 ? '591' + d : d; };
 const fmtWa = (d) => (d.startsWith('591') && d.length === 11 ? '+591 ' + d.slice(3, 7) + ' ' + d.slice(7) : d ? '+' + d : '');
@@ -303,6 +303,14 @@ export default function Negocio() {
             <ImageUpload value={n.hero} label="Foto de portada (se ve detrás del título)" onChange={(u) => set('hero', u)} />
             <p className="mt-1 text-xs text-stone-500">Horizontal, mínimo 1600 por 900 px. La tienda le pone una capa oscura encima para que el texto se lea.</p>
             {n.hero && <button type="button" onClick={() => set('hero', '')} className="mt-1 text-xs font-bold text-red-600 underline">Quitar portada</button>}
+          </div>
+        </Seccion>
+
+        <Seccion titulo="Pago por QR" resumen={n.qr ? 'QR cargado' : 'Sin QR'}>
+          <div>
+            <ImageUpload value={n.qr} label="QR de pago de la tienda" onChange={(u) => set('qr', u)} />
+            <p className="mt-1 text-xs text-stone-500">Sube la imagen del QR de tu banco. En el pedido, el cliente la ve si elige pagar por QR.</p>
+            {n.qr && <button type="button" onClick={() => set('qr', '')} className="mt-1 text-xs font-bold text-red-600 underline">Quitar QR</button>}
           </div>
         </Seccion>
 
