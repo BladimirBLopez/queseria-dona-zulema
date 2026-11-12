@@ -1,0 +1,9 @@
+node_modules
+.next
+.env*
+.DS_Store
+.vercel
+
+# copias de seguridad locales
+*.bak-*
+_detalle_banner_*.py
