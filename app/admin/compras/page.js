@@ -74,7 +74,7 @@ function AvisoCosto({ l, unit }) {
     const d = r2(unit - ant);
     if (Math.abs(d) >= 0.01) {
       const pct = Math.round((Math.abs(d) / ant) * 100);
-      avisos.push([d > 0 ? 'text-amber-700' : 'text-green-700', 'Ahora te cuesta ' + bs(Math.abs(d)) + (d > 0 ? ' más (' + pct + '% más caro)' : ' menos (' + pct + '% más barato)')]);
+      avisos.push([pct >= 40 ? 'font-bold text-amber-700' : d > 0 ? 'text-amber-700' : 'text-green-700', 'Ahora te cuesta ' + bs(Math.abs(d)) + (d > 0 ? ' más (' + pct + '% más caro)' : ' menos (' + pct + '% más barato)') + (pct >= 40 ? '. Revisa si el precio está bien' : '')]);
     }
   }
   for (const [nombre, precio] of [['menor', l.pmenor], ['mayor', l.pmayor]]) {
@@ -92,6 +92,29 @@ function AvisoCosto({ l, unit }) {
   return (
     <div className="mt-1 space-y-0.5 text-xs">
       {avisos.map(([cls, t], i) => <p key={i} className={cls}>{t}</p>)}
+    </div>
+  );
+}
+
+function totalDe(l) {
+  return l.modo === 'total'
+    ? r2(n(l.total))
+    : r2(n(l.cantidad) * n(l.pu ?? ''));
+}
+
+function CampoPago({ l, cambiar }) {
+  const porTotal = l.modo === 'total';
+  const pastilla = (activa) =>
+    'flex-1 rounded-full px-2 py-1 text-[11px] font-bold ' +
+    (activa ? 'bg-vino-800 text-white' : 'bg-stone-200 text-stone-600');
+  return (
+    <div className="text-[11px] text-stone-500">
+      ¿Cuánto pagaste? (Bs)
+      <div className="my-1 flex gap-1">
+        <button type="button" className={pastilla(!porTotal)} onClick={() => cambiar(l.id, 'modo', 'unidad')}>Cada uno</button>
+        <button type="button" className={pastilla(porTotal)} onClick={() => cambiar(l.id, 'modo', 'total')}>Total</button>
+      </div>
+      <input type="number" inputMode="decimal" step="0.01" min="0" placeholder="0.00" value={porTotal ? l.total : (l.pu ?? '')} onChange={(e) => cambiar(l.id, porTotal ? 'total' : 'pu', e.target.value)} />
     </div>
   );
 }
@@ -128,7 +151,7 @@ function NuevaCompra({ onCerrar, onListo }) {
       .slice(0, 8);
   }, [productos, q]);
 
-  const total = r2(lineas.reduce((a, l) => a + r2(n(l.total)), 0));
+  const total = r2(lineas.reduce((a, l) => a + totalDe(l), 0));
 
   function agregar(p) {
     const id = String(p.id);
@@ -173,7 +196,7 @@ function NuevaCompra({ onCerrar, onListo }) {
       const c = n(l.cantidad);
       if (!(c > 0)) return setErr('Revisa la cantidad de ' + l.nombre + '.');
       if (!(r3(c) > 0)) return setErr('Revisa la cantidad de ' + l.nombre + '.');
-      if (!(r2(n(l.total)) > 0)) return setErr('Escribe cuánto pagaste por ' + l.nombre + '.');
+      if (!(totalDe(l) > 0)) return setErr('Escribe cuánto pagaste por ' + l.nombre + '.');
       if (!admiteDecimales(l.unidad) && !Number.isInteger(c)) return setErr(l.nombre + ' se cuenta en números enteros.');
     }
     const body = {
@@ -184,7 +207,7 @@ function NuevaCompra({ onCerrar, onListo }) {
       nota: nota.trim(),
       items: lineas.map((l) => {
         const cantidad = r3(n(l.cantidad));
-        const subtotal = r2(n(l.total));
+        const subtotal = totalDe(l);
         const costo = r2(subtotal / cantidad);
         return { producto_id: l.id, cantidad, costo, subtotal };
       }),
@@ -268,7 +291,7 @@ function NuevaCompra({ onCerrar, onListo }) {
             <ul className="space-y-2">
               {lineas.map((l) => {
                 const dec = admiteDecimales(l.unidad);
-                const sub = r2(n(l.total));
+                const sub = totalDe(l);
                 const unit = n(l.cantidad) > 0 && sub > 0 ? r2(sub / n(l.cantidad)) : null;
                 return (
                   <li key={l.id} className="rounded-2xl bg-stone-50 p-3">
@@ -280,16 +303,14 @@ function NuevaCompra({ onCerrar, onListo }) {
                       </div>
                       <button type="button" onClick={() => quitar(l.id)} aria-label="Quitar" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-red-50 text-red-600"><Trash2 size={15} /></button>
                     </div>
-                    <div className="mt-2 grid grid-cols-3 gap-2">
+                    <div className="mt-2 grid grid-cols-2 gap-2">
                       <label className="text-[11px] text-stone-500">{'¿Cuántos compraste? (' + l.unidad + ')'}
                         <input type="number" inputMode={dec ? 'decimal' : 'numeric'} step={dec ? 'any' : '1'} min="0" placeholder="0" value={l.cantidad} onChange={(e) => cambiar(l.id, 'cantidad', e.target.value)} />
                       </label>
-                      <label className="text-[11px] text-stone-500">¿Cuánto pagaste en total? (Bs)
-                        <input type="number" inputMode="decimal" step="0.01" min="0" placeholder="0.00" value={l.total} onChange={(e) => cambiar(l.id, 'total', e.target.value)} />
-                      </label>
-                      <div className="text-right">
-                        <p className="text-[11px] text-stone-500">Cada uno te cuesta</p>
-                        <p className="pt-2 font-extrabold text-stone-900">{unit == null ? '—' : bs(unit) + '/' + l.unidad}</p>
+                      <CampoPago l={l} cambiar={cambiar} />
+                      <div className="col-span-2 flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm">
+                        <p className="text-stone-500">Total: <b className="text-stone-900">{sub > 0 ? bs(sub) : '—'}</b></p>
+                        <p className="text-stone-500">{'Cada ' + l.unidad + ': '}<b className="text-stone-900">{unit == null ? '—' : bs(unit)}</b></p>
                       </div>
                     </div>
                   </li>
