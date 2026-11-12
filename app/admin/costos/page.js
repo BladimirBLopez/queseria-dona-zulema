@@ -89,7 +89,7 @@ export default function Costos() {
               <li key={p.id} className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-card">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{p.nombre}</p>
-                  <p className="text-xs text-stone-500">{precio != null ? 'Vendes a ' + bs(precio) + '/' + (p.unidad || 'u') : 'Sin precio al menor'}</p>
+                  <p className="text-xs text-stone-500">{precio != null ? 'Vendes a ' + bs(precio) + '/' + (p.unidad || 'u') : 'Sin precio de venta'}</p>
                   {g != null && (
                     <p className={'mt-0.5 text-[11px] font-bold ' + (g < 0 ? 'text-red-600' : 'text-green-700')}>
                       {g < 0 ? 'Pierdes ' + bs(-g) : 'Ganas ' + bs(g)}{c > 0 && g >= 0 ? ' · ' + Math.round((g / c) * 100) + '%' : ''}

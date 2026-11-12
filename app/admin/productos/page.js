@@ -209,7 +209,7 @@ export default function Admin() {
             <div className="min-w-0 flex-1">
               <p className="truncate font-semibold">{p.nombre}</p>
               <p className="truncate text-xs text-stone-500">{p.categoria}{p.codigo ? ' · ' + p.codigo : ''}</p>
-              <p className="mt-0.5 text-xs"><span className="font-semibold text-vino-800">{p.precio_menor == null ? 'Sin precio' : 'Bs ' + bs(p.precio_menor) + ' / ' + (p.unidad || 'unidad')}</span>{p.precio_mayor != null && <span className="text-amber-700">{' · ' + (p.mayor_desde != null ? 'desde ' + fmt(p.mayor_desde) + ' ' + (p.unidad || '') + ': ' : 'mayor: ') + 'Bs ' + bs(p.precio_mayor)}</span>}</p>
+              <p className="mt-0.5 text-xs"><span className="font-semibold text-vino-800">{p.precio_menor == null ? 'Sin precio' : 'Bs ' + bs(p.precio_menor) + ' / ' + (p.unidad || 'unidad')}</span>{p.precio_mayor != null && <span className="text-amber-700">{' · ' + (p.mayor_desde != null ? 'por mayor desde ' + fmt(p.mayor_desde) + ' ' + (p.unidad || '') + ': ' : 'por mayor: ') + 'Bs ' + bs(p.precio_mayor)}</span>}</p>
               <Info p={p} />
             </div>
             <div className="flex shrink-0 flex-col items-end gap-2">
