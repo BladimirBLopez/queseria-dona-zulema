@@ -6,6 +6,7 @@ const H2 = ({ eyebrow, children, sub }) => (
   <div className="mb-10 text-center">
     {eyebrow && <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-oro-600">{eyebrow}</p>}
     <h2 className="font-serif text-3xl font-extrabold text-vino-800 md:text-4xl">{children}</h2>
+    <div className="mx-auto mt-3 h-1 w-14 rounded-full bg-oro-400" />
     {sub && <p className="mx-auto mt-3 max-w-xl text-stone-600">{sub}</p>}
   </div>
 );
@@ -31,9 +32,9 @@ export function Beneficios({ n }) {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {BEN.map(([Icon, t, d], i) => (
             <Reveal key={t} delay={i * 0.08} className="h-full">
-              <div className="h-full rounded-3xl bg-crema p-6 ring-1 ring-vino-900/5">
+              <div className="h-full rounded-2xl bg-crema p-6 ring-1 ring-oro-400/30 transition hover:-translate-y-1 hover:shadow-card">
                 <span className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-vino-800 text-oro-300"><Icon size={22} /></span>
-                <h3 className="font-bold text-vino-800">{t}</h3>
+                <h3 className="font-serif text-lg font-bold text-vino-800">{t}</h3>
                 <p className="mt-1 text-sm text-stone-600">{d}</p>
               </div>
             </Reveal>
@@ -66,10 +67,10 @@ export function Info({ n, wa }) {
           <div className="grid gap-4 md:grid-cols-3">
             {PASOS.map(([Icon, t, d], i) => (
               <Reveal key={t} delay={i * 0.1}>
-                <div className="relative h-full rounded-3xl bg-white p-6 shadow-card">
+                <div className="relative h-full rounded-2xl bg-white p-6 shadow-card ring-1 ring-oro-400/30">
                   <span className="absolute right-5 top-4 font-serif text-5xl font-extrabold text-vino-100">{i + 1}</span>
                   <span className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-oro-400 text-vino-950"><Icon size={22} /></span>
-                  <h3 className="font-bold">{t}</h3>
+                  <h3 className="font-serif text-lg font-bold text-vino-800">{t}</h3>
                   <p className="mt-1 text-sm text-stone-600">{d}</p>
                 </div>
               </Reveal>
