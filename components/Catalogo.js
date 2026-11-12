@@ -32,7 +32,7 @@ function Card({ p, qty, onAdd }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35 }}
-      className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-vino-900/5 transition hover:-translate-y-1 hover:shadow-lift"
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-oro-400/30 transition hover:-translate-y-1 hover:shadow-lift"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-oro-200/60 to-vino-100">
         {p.img ? (
@@ -40,14 +40,14 @@ function Card({ p, qty, onAdd }) {
         ) : (
           <div className="grid h-full place-items-center text-vino-300"><Icono lslug={p.lslug} className="h-14 w-14" /></div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-vino-800 backdrop-blur">{p.categoria}</span>
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-vino-800 backdrop-blur">{p.categoria}</span>
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h4 className="font-semibold leading-snug text-stone-900"><Link href={`/producto/${p.id}`} className="after:absolute after:inset-0 hover:text-vino-700">{p.nombre}</Link></h4>
         <div className="mt-3">
           {menor ? (
             <p className="flex flex-wrap items-baseline gap-x-1.5">
-              <span className="text-xl font-extrabold text-vino-800">{menor}</span>
+              <span className="font-serif text-2xl font-extrabold text-vino-800">{menor}</span>
               <span className="text-xs text-stone-500">{'por ' + unidadDe(p.unidad)}</span>
             </p>
           ) : (
@@ -265,6 +265,11 @@ export default function Catalogo({ productos, wa, qr = '' }) {
 
   return (
     <section id="catalogo" className="scroll-mt-16 bg-crema pb-10 pt-6">
+      <div className="mx-auto max-w-6xl px-4 pt-4 text-center">
+        <h2 className="font-serif text-3xl font-extrabold text-vino-900 md:text-4xl">Nuestro catálogo</h2>
+        <div className="mx-auto mt-3 h-1 w-14 rounded-full bg-oro-400" />
+        <p className="mt-3 text-sm text-stone-600">Elige tus productos y arma tu pedido</p>
+      </div>
       <div className="mx-auto max-w-6xl space-y-3 px-4 py-3">
           <div className="relative">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" />
