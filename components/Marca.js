@@ -29,7 +29,7 @@ export default function Marca({ N, big = false, horizontal = false }) {
         className={
           big
             ? 'mx-auto block text-2xl font-extrabold text-white'
-            : 'block max-w-[52vw] font-serif text-[13px] font-bold leading-tight tracking-wide text-oro-200 sm:text-xl'
+            : 'block max-w-[52vw] text-center font-serif text-[13px] font-bold leading-tight tracking-wide text-oro-200 sm:text-xl'
         }
       >
         {N?.nombre || 'Negocio'}

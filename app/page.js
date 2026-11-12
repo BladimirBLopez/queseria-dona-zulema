@@ -54,28 +54,29 @@ export default async function Home() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-vino-950/95 text-white backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+      <div className="bg-vino-900 px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-oro-300">Venta al por mayor y menor · Pedidos por WhatsApp</div>
+      <header className="sticky top-0 z-30 border-b border-oro-400/30 bg-vino-950/95 text-white backdrop-blur">
+        <div className="mx-auto grid h-16 max-w-6xl grid-cols-[2.5rem_1fr_2.5rem] items-center gap-2 px-4">
           <Menu items={menu} pedido={pedido} />
-          <a href="#" className="flex min-w-0 items-center">
+          <a href="#" className="flex min-w-0 items-center justify-center">
             <Marca N={N} horizontal />
           </a>
-          <a href={pedido} className="flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 text-sm font-bold shadow transition hover:bg-green-600">
-            <WhatsApp size={18} /> <span className="hidden min-[400px]:inline">Escríbenos</span>
+          <a href={pedido} aria-label="Escribir por WhatsApp" className="grid h-10 w-10 place-items-center rounded-full bg-green-500 shadow transition hover:bg-green-600">
+            <WhatsApp size={20} />
           </a>
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-vino-950 via-vino-900 to-vino-700 text-white">
+      <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_50%_0%,theme(colors.vino.800),theme(colors.vino.950)_75%)] text-white">
         {N.hero && (
           <>
             <img src={N.hero.replace('/upload/', '/upload/f_auto,q_auto,w_1600/')} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-vino-950/80 via-vino-950/60 to-vino-950/90" />
           </>
         )}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-oro-400/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-vino-500/30 blur-3xl" />
-        <div className="relative mx-auto max-w-4xl px-4 pb-28 pt-16 text-center md:pt-28">
+        
+        
+        <div className="relative mx-auto max-w-4xl px-4 pb-16 pt-14 text-center md:pt-24">
           <Reveal>
             {N.slogan && (
               <span className="inline-block rounded-full border border-oro-300/40 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-oro-300">{N.slogan}</span>
@@ -89,18 +90,18 @@ export default async function Home() {
                   <MapPin size={20} /> Cómo llegar
                 </a>
               )}
-              <a href={pedido} className="flex items-center gap-2 rounded-full bg-green-500 px-8 py-3.5 font-bold text-white shadow-lift transition hover:bg-green-600">
+              <a href={pedido} className="flex items-center gap-2 rounded-full border border-oro-300/50 px-8 py-3.5 font-semibold text-white transition hover:bg-white/10">
                 <WhatsApp size={20} /> Pedir por WhatsApp
               </a>
             </div>
-            <ul className="mx-auto mt-10 flex max-w-md flex-wrap justify-center gap-x-6 gap-y-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm text-oro-200 backdrop-blur">
-              <li className="flex items-center gap-2"><Scale size={16} /> Mayor y menor</li>
-              <li className="flex items-center gap-2"><Snowflake size={16} /> Cadena de frío</li>
+            <ul className="mx-auto mt-12 grid max-w-sm grid-cols-2 divide-x divide-oro-300/30 border-y border-oro-300/30 py-4 text-sm text-oro-200">
+              <li className="flex items-center justify-center gap-2"><Scale size={16} /> Mayor y menor</li>
+              <li className="flex items-center justify-center gap-2"><Snowflake size={16} /> Cadena de frío</li>
               
             </ul>
           </Reveal>
         </div>
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="absolute bottom-0 block w-full fill-crema" style={{ height: 48 }} aria-hidden="true">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="absolute bottom-0 block w-full fill-crema" style={{ height: 16 }} aria-hidden="true">
           <path d="M0,48 C240,96 480,0 720,32 C960,64 1200,80 1440,24 L1440,80 L0,80 Z" />
         </svg>
       </section>
