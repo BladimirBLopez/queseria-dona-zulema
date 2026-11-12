@@ -372,8 +372,8 @@ export default function NuevaVenta() {
         <Link href="/admin/ventas" aria-label="Volver" className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white shadow-card"><ArrowLeft size={18} /></Link>
         <h1 className="min-w-0 flex-1 truncate text-xl font-bold text-stone-900">{'Nueva venta' + (pedidoId ? ' · pedido #' + pedidoId : '')}</h1>
         <div className="flex shrink-0 rounded-full bg-stone-200 p-0.5">
-          <button onClick={() => cambiarTipo('menor')} className={`rounded-full px-3 py-1.5 text-xs font-bold ${tipo === 'menor' ? 'bg-white text-vino-800 shadow-sm' : 'text-stone-600'}`}>Menor</button>
-          <button onClick={() => cambiarTipo('mayor')} className={`rounded-full px-3 py-1.5 text-xs font-bold ${tipo === 'mayor' ? 'bg-white text-vino-800 shadow-sm' : 'text-stone-600'}`}>Mayor</button>
+          <button onClick={() => cambiarTipo('menor')} className={`rounded-full px-3 py-1.5 text-xs font-bold ${tipo === 'menor' ? 'bg-white text-vino-800 shadow-sm' : 'text-stone-600'}`}>Venta normal</button>
+          <button onClick={() => cambiarTipo('mayor')} className={`rounded-full px-3 py-1.5 text-xs font-bold ${tipo === 'mayor' ? 'bg-white text-vino-800 shadow-sm' : 'text-stone-600'}`}>Por mayor</button>
         </div>
       </div>
 

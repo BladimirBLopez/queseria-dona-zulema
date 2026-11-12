@@ -35,7 +35,7 @@ function VentaCard({ v, negocio, onChange, aviso }) {
           <p className="truncate text-xs text-stone-500">{diaBO(v.fecha)} {horaBO(v.fecha)} · {v.items.map((i) => i.nombre).join(', ')}</p>
           <div className="mt-1 flex flex-wrap gap-1 text-[11px] font-semibold">
             <span className="rounded-full bg-stone-100 px-2 py-0.5 text-stone-600">{MET[v.metodo] || v.metodo}</span>
-            {v.tipo === 'mayor' && <span className="rounded-full bg-oro-200/60 px-2 py-0.5 text-amber-900">Mayor</span>}
+            {v.tipo === 'mayor' && <span className="rounded-full bg-oro-200/60 px-2 py-0.5 text-amber-900">Por mayor</span>}
             {anulada && <span className="rounded-full bg-red-100 px-2 py-0.5 text-red-700">Anulada</span>}
           </div>
         </div>
