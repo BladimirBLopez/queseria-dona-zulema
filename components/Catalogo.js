@@ -34,20 +34,20 @@ function Card({ p, qty, onAdd }) {
       transition={{ duration: 0.35 }}
       className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-oro-400/30 transition hover:-translate-y-1 hover:shadow-lift"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-oro-200/60 to-vino-100">
+      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-oro-200/60 to-vino-100 sm:aspect-[4/3]">
         {p.img ? (
           <img src={p.img} alt={p.nombre} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         ) : (
           <div className="grid h-full place-items-center text-vino-300"><Icono lslug={p.lslug} className="h-14 w-14" /></div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-vino-800 backdrop-blur">{p.categoria}</span>
+        <span className="absolute left-2 top-2 sm:left-3 sm:top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-vino-800 backdrop-blur">{p.categoria}</span>
       </div>
-      <div className="flex flex-1 flex-col p-4">
-        <h4 className="font-semibold leading-snug text-stone-900"><Link href={`/producto/${p.id}`} className="after:absolute after:inset-0 hover:text-vino-700">{p.nombre}</Link></h4>
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <h4 className="text-sm font-semibold leading-snug text-stone-900 sm:text-base"><Link href={`/producto/${p.id}`} className="after:absolute after:inset-0 hover:text-vino-700">{p.nombre}</Link></h4>
         <div className="mt-3">
           {menor ? (
             <p className="flex flex-wrap items-baseline gap-x-1.5">
-              <span className="font-serif text-2xl font-extrabold text-vino-800">{menor}</span>
+              <span className="font-serif text-xl font-extrabold text-vino-800 sm:text-2xl">{menor}</span>
               <span className="text-xs text-stone-500">{'por ' + unidadDe(p.unidad)}</span>
             </p>
           ) : (
@@ -69,7 +69,7 @@ function Card({ p, qty, onAdd }) {
             </div>
           ) : (
             <button onClick={() => onAdd(p, st)} className="flex w-full items-center justify-center gap-2 rounded-full bg-vino-800 py-2.5 text-sm font-bold text-white transition hover:bg-vino-700 active:scale-95">
-              <Plus size={16} /> Agregar al pedido
+              <Plus size={16} /> <span className="sm:hidden">Agregar</span><span className="hidden sm:inline">Agregar al pedido</span>
             </button>
           )}
         </div>
@@ -362,7 +362,7 @@ export default function Catalogo({ productos, wa, qr = '' }) {
                   <span className="h-6 w-1.5 rounded bg-oro-400" /> {c.nombre}
                   <span className="text-sm font-normal text-stone-400">{c.items.length}</span>
                 </h3>
-                <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
                   {c.items.map((p) => (
                     <Card key={p.id} p={p} qty={cart[p.id]?.qty} onAdd={add} />
                   ))}
@@ -371,7 +371,7 @@ export default function Catalogo({ productos, wa, qr = '' }) {
             ))}
           </div>
         )) : (
-          <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
             {filtrados.map((p) => (
               <Card key={p.id} p={p} qty={cart[p.id]?.qty} onAdd={add} />
             ))}

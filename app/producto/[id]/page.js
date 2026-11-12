@@ -5,6 +5,7 @@ import { sql } from '@/lib/db';
 import { thumb } from '@/lib/cloudinary';
 import { getNegocio, makeWa } from '@/lib/negocio';
 import WhatsApp from '@/components/WhatsApp';
+import Marca from '@/components/Marca';
 
 export const revalidate = 60;
 
@@ -51,6 +52,7 @@ export default async function Producto({ params }) {
 
   return (
     <main className="min-h-screen bg-crema">
+      <header className="border-b border-oro-400/30 bg-vino-950 py-3"><Link href="/" className="flex justify-center"><Marca N={N} horizontal /></Link></header>
       <div className="mx-auto max-w-4xl px-4 py-6">
         <Link href="/#catalogo" className="inline-flex items-center gap-2 text-sm font-semibold text-vino-800">
           <ArrowLeft size={18} /> Volver al catálogo
@@ -67,7 +69,7 @@ export default async function Producto({ params }) {
               {mayor && <span className="rounded-lg bg-oro-200/50 px-3 py-1.5 text-amber-900">Mayor <b>{mayor}</b>/{u}</span>}
               {!menor && !mayor && <span className="rounded-lg bg-stone-100 px-3 py-1.5 text-stone-500">Consultar precio</span>}
             </div>
-            <p className="mt-4 text-sm text-stone-600">El precio final se confirma al momento del pedido.</p>
+            <p className="mb-6 mt-4 text-sm text-stone-600">El precio final se confirma al momento del pedido.</p>
             <a href={wa(`Hola, quiero pedir: ${p.nombre}`)} className="mt-auto flex items-center justify-center gap-2 rounded-full bg-green-500 px-6 py-3 font-bold text-white shadow transition hover:bg-green-600">
               <WhatsApp size={20} /> Pedir por WhatsApp
             </a>
