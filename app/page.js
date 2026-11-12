@@ -49,7 +49,7 @@ export default async function Home() {
     ['Catálogo', '#catalogo'],
     ['Cómo pedir', '#como-pedir'],
     ...(N.faq.length > 0 ? [['Preguntas frecuentes', '#preguntas']] : []),
-    ...((N.direccion || N.horarios.length || N.mapa) ? [['Visítanos', '#visitanos']] : []),
+    ...((N.direccion || N.horarios.length || N.mapa || N.ubicacion) ? [['Visítanos', '#visitanos']] : []),
   ];
 
   return (
@@ -84,7 +84,7 @@ export default async function Home() {
             {N.subtitulo && <p className="mx-auto mt-5 max-w-xl text-lg text-vino-100">{N.subtitulo}</p>}
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a href="#catalogo" className="rounded-full bg-oro-400 px-8 py-3.5 font-bold text-vino-950 shadow-lift transition hover:bg-oro-300">Ver catálogo</a>
-              {(N.direccion || N.mapa) && (
+              {(N.direccion || N.mapa || N.ubicacion) && (
                 <a href="#visitanos" className="flex items-center gap-2 rounded-full border border-white/30 px-8 py-3.5 font-semibold transition hover:bg-white/10">
                   <MapPin size={20} /> Cómo llegar
                 </a>

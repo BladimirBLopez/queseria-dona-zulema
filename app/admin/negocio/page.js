@@ -30,6 +30,16 @@ const mapaSrc = (v) => {
   return u.startsWith('https://www.google.com/maps/embed') ? u : '';
 };
 
+const ubicOk = (v) => {
+  const t = String(v || '').trim();
+  if (!t) return true;
+  try {
+    const u = new URL(/^https?:\/\//i.test(t) ? t : 'https://' + t);
+    const h = u.hostname.toLowerCase();
+    return h === 'maps.app.goo.gl' || h === 'maps.google.com' || (/^(www\.)?(google\.[a-z.]+|goo\.gl)$/.test(h) && u.pathname.startsWith('/maps'));
+  } catch { return false; }
+};
+
 function armarRed(red, v) {
   const t = String(v || '').trim();
   if (!t) return '';
@@ -46,6 +56,7 @@ function errores(n) {
   if (wa.length < 8 || wa.length > 15) e.whatsapp = 'Escribe un número válido, con código de país (ej. 59175284955).';
   for (const r of REDES) if (!https(n[r.k])) e[r.k] = 'El enlace de ' + r.nombre + ' debe empezar con https://';
   if (String(n.mapa || '').trim() && !mapaSrc(n.mapa)) e.mapa = 'Pega el código Insertar mapa de Google Maps (empieza con iframe).';
+  if (!ubicOk(n.ubicacion)) e.ubicacion = 'Pega el enlace que sale en Google Maps al tocar Compartir.';
   return e;
 }
 
@@ -307,7 +318,7 @@ export default function Negocio() {
           </Campo>
         </Seccion>
 
-        <Seccion titulo="Contacto y ubicación" resumen={fmtWa(wa) || 'Sin WhatsApp'} abierta forzar={!!(err.whatsapp || err.mapa)} estado={err.whatsapp || err.mapa ? rojo : null}>
+        <Seccion titulo="Contacto y ubicación" resumen={fmtWa(wa) || 'Sin WhatsApp'} abierta forzar={!!(err.whatsapp || err.mapa || err.ubicacion)} estado={err.whatsapp || err.mapa || err.ubicacion ? rojo : null}>
           <Campo label="WhatsApp" error={err.whatsapp} ayuda={digitos(n.whatsapp).length === 8 ? 'Se guardará con el código de Bolivia: ' + fmtWa(wa) : 'Con código de país y solo números. Los pedidos llegan a este número.'}>
             <input inputMode="numeric" placeholder="59175284955" value={n.whatsapp} onChange={(e) => set('whatsapp', digitos(e.target.value).slice(0, 15))} />
           </Campo>
@@ -317,7 +328,10 @@ export default function Negocio() {
           <Campo label="Dirección" extra={(n.direccion || '').length + '/200'}>
             <input maxLength={200} value={n.direccion} onChange={(e) => set('direccion', e.target.value)} />
           </Campo>
-          <Campo label="Mapa de Google Maps" error={err.mapa} ayuda="En Google Maps toca Compartir, luego Insertar mapa, copia el código y pégalo aquí.">
+          <Campo label="Ubicación (círculo en la tienda)" error={err.ubicacion} ayuda="En Google Maps toca Compartir, copia el enlace y pégalo aquí. En la tienda sale como un círculo, igual que las redes.">
+            <input inputMode="url" placeholder="https://maps.app.goo.gl/..." value={n.ubicacion || ''} onChange={(e) => set('ubicacion', e.target.value)} />
+          </Campo>
+          <Campo label="Mapa dentro de la página (opcional)" error={err.mapa} ayuda="En Google Maps toca Compartir, luego Insertar mapa, copia el código y pégalo aquí.">
             <textarea rows={3} placeholder='<iframe src="https://www.google.com/maps/embed?..."></iframe>' value={n.mapa} onChange={(e) => set('mapa', e.target.value)} />
           </Campo>
           {src && <iframe src={src} title="Mapa" loading="lazy" className="h-48 w-full rounded-2xl border-0" />}

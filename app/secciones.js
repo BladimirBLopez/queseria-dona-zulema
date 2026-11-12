@@ -55,8 +55,8 @@ export function Beneficios({ n }) {
 }
 
 export function Info({ n, wa }) {
-  const hayUbicacion = n.direccion || n.horarios.length || n.mapa;
-  const redes = [['Facebook', n.facebook], ['Instagram', n.instagram], ['TikTok', n.tiktok]].filter(([, u]) => u);
+  const hayUbicacion = n.direccion || n.horarios.length || n.mapa || n.ubicacion;
+  const redes = [['Facebook', n.facebook], ['Instagram', n.instagram], ['TikTok', n.tiktok], ['Ubicación', n.ubicacion]].filter(([, u]) => u);
 
   return (
     <>

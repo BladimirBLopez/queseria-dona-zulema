@@ -6,7 +6,9 @@ export const IconFacebook = (p) => <Svg {...p}><path d="M18 2h-3a5 5 0 0 0-5 5v3
 export const IconInstagram = (p) => <Svg {...p}><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></Svg>;
 export const IconTikTok = (p) => <Svg {...p}><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" /></Svg>;
 
-export const ICONOS_REDES = { Facebook: IconFacebook, Instagram: IconInstagram, TikTok: IconTikTok };
+export const IconUbicacion = (p) => <Svg {...p}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></Svg>;
+
+export const ICONOS_REDES = { Facebook: IconFacebook, Instagram: IconInstagram, TikTok: IconTikTok, 'Ubicación': IconUbicacion };
 
 export function RedLink({ nombre, u }) {
   const Icon = ICONOS_REDES[nombre];

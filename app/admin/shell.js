@@ -318,7 +318,8 @@ export default function Shell({ children }) {
     );
   }
 
-  const tab = (a) => `flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-semibold ${a ? 'text-vino-800' : 'text-stone-500'}`;
+  const tab = (a) => `flex flex-1 flex-col items-center gap-0.5 py-1.5 text-[11px] font-semibold ${a ? 'text-vino-800' : 'text-stone-500'}`;
+  const pillNueva = 'relative -mt-5 grid h-12 w-12 place-items-center rounded-full bg-oro-400 text-vino-950 shadow-lift ring-4 ring-white';
   const pill = (a) => `grid h-7 w-12 place-items-center rounded-full transition ${a ? 'bg-vino-100' : ''}`;
   const item = (a) => `flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${a ? 'bg-oro-400 text-vino-950 shadow-sm' : 'text-vino-100 hover:bg-white/10'}`;
 
@@ -354,13 +355,13 @@ export default function Shell({ children }) {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-vino-950 px-4 py-2.5 text-white md:fixed md:right-5 md:top-3 md:z-40 md:w-auto md:border-0 md:bg-transparent md:p-0">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-oro-400 bg-vino-950 px-4 py-2.5 text-white md:fixed md:right-5 md:top-3 md:z-40 md:w-auto md:border-0 md:bg-transparent md:p-0">
         <div className="flex min-w-0 items-center gap-2.5 md:hidden">
           <button type="button" onClick={() => setMas(true)} aria-label="Abrir menú" className="-ml-1 grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-white/10"><MenuIcon size={22} /></button>
           <span className="shrink-0 [&>*]:!h-8 [&>*]:!w-8 [&>*]:!text-base"><Marca N={marca} /></span>
           <div className="min-w-0 leading-tight">
             <p className="truncate font-serif text-base font-extrabold">{actual ? actual[1] : 'Admin'}</p>
-            <p className="truncate text-[11px] text-vino-200">{marca.nombre}</p>
+            <p className="truncate font-brand text-xs font-bold text-oro-300">{marca.nombre}</p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -380,12 +381,12 @@ export default function Shell({ children }) {
         <div className="mx-auto max-w-5xl pb-28 pt-2 md:pb-10">{children}</div>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-stone-200 bg-white/95 backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 flex items-end justify-around border-t-2 border-oro-400/60 bg-white/95 backdrop-blur md:hidden">
         {PRINCIPAL
           .filter(([href]) => puedeVerRuta(href))
           .map(([href, t, Icon]) => (
           <Link key={href} href={href} aria-current={on(href) ? 'page' : undefined} className={tab(on(href))}>
-            <span className={pill(on(href))}><Icon size={20} /></span>
+            <span className={href === '/admin/ventas/nueva' ? pillNueva : pill(on(href))}><Icon size={20} /></span>
             {t}
           </Link>
         ))}
