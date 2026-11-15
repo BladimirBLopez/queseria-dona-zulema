@@ -7,11 +7,11 @@ import { bs, qty, hoyBO } from '@/lib/fmt';
 import { Page, PageHeader, Card, Stat, Badge, Btn, Empty, Skeleton } from '@/components/ui';
 
 const ACCESOS = [
-  ['/admin/ventas/nueva', 'Vender', Plus],
+  ['/admin/ventas/nueva', 'Punto de venta', Plus],
   ['/admin/productos', 'Productos', Package],
   ['/admin/categorias', 'Categorías', Tags],
-  ['/admin/banners', 'Ofertas', Megaphone],
-  ['/admin/negocio', 'Negocio', Store],
+  ['/admin/banners', 'Promociones', Megaphone],
+  ['/admin/negocio', 'Configuración', Store],
   ['/admin/clave', 'Clave', KeyRound],
 ];
 
@@ -31,7 +31,6 @@ export default function Inicio() {
 
   const cargar = useCallback(async () => {
     setErr('');
-    setD(null);
     const r = await api(`/api/admin/reportes?desde=${hoyBO(-6)}&hasta=${hoyBO()}`);
     if (r.status === 401) return;
     if (!r.ok) return setErr(errMsg(r.data));
