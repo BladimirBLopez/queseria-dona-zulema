@@ -43,6 +43,7 @@ export default function Shell({ children }) {
   const [usuarioSesion, setUsuarioSesion] = useState(null);
   const [permisosSesion, setPermisosSesion] = useState([]);
   const saliendo = useRef(false);
+  const yaComprobada = useRef(false);
   const [extra, setExtra] = useState({});
   const abierto = (g, links) => links.length === 1 || (g in extra ? extra[g] : links.some(([h]) => on(h)));
   const alternar = (g, links) => setExtra((e) => ({ ...e, [g]: !(g in e ? e[g] : links.some(([h]) => on(h))) }));
@@ -79,7 +80,7 @@ export default function Shell({ children }) {
 
     async function check() {
       if (activo) {
-        setComprobandoSesion(true);
+        if (!yaComprobada.current) setComprobandoSesion(true);
       }
 
       try {
@@ -133,6 +134,7 @@ export default function Shell({ children }) {
       } finally {
         if (activo) {
           setComprobandoSesion(false);
+          yaComprobada.current = true;
         }
       }
     }
