@@ -72,10 +72,20 @@ const BTN = {
   soft: 'bg-vino-50 text-vino-800 hover:bg-vino-100',
   ghost: 'bg-white text-stone-700 ring-1 ring-stone-300 hover:bg-stone-50',
   danger: 'bg-red-50 text-red-700 hover:bg-red-100',
+  oro: 'bg-oro-400 text-vino-950 hover:bg-oro-300',
 };
 
-export function Btn({ variant = 'primary', href, className = '', children, ...rest }) {
-  const cls = `inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition disabled:opacity-50 ${BTN[variant]} ${className}`;
+function Spinner() {
+  return (
+    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+      <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function Btn({ variant = 'primary', href, className = '', loading = false, children, ...rest }) {
+  const cls = `inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold shadow-sm transition disabled:opacity-50 ${BTN[variant]} ${className}`;
   if (href) return <a href={href} className={cls} {...rest}>{children}</a>;
-  return <button type="button" className={cls} {...rest}>{children}</button>;
+  return <button type="button" className={cls} {...rest} disabled={loading || rest.disabled} aria-busy={loading || undefined}>{loading && <Spinner />}{children}</button>;
 }
