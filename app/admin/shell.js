@@ -20,12 +20,12 @@ const Costos = (p) => <Svg {...p}><path d="M8 6h13" /><path d="M8 12h13" /><path
 const Cierre = (p) => <Svg {...p}><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 7h8" /><path d="M8 12h.01" /><path d="M12 12h.01" /><path d="M16 12h.01" /><path d="M8 16h.01" /><path d="M12 16h.01" /><path d="M16 16h.01" /></Svg>;
 
 const GRUPOS = [
-  ['Principal', [['/admin/inicio', 'Inicio', Inicio]]],
-  ['Ventas', [['/admin/ventas/nueva', 'Nueva venta', Plus], ['/admin/ventas', 'Ventas', ShoppingCart]]],
+  ['Principal', [['/admin/inicio', 'Panel', Inicio]]],
+  ['Ventas', [['/admin/ventas/nueva', 'Punto de venta', Plus], ['/admin/ventas', 'Ventas', ShoppingCart]]],
   ['Inventario', [['/admin/productos', 'Productos', Package], ['/admin/categorias', 'Categorías', Tags]]],
-  ['Contabilidad', [['/admin/compras', 'Compras', Truck], ['/admin/gastos', 'Gastos', Wallet], ['/admin/costos', 'Costos', Costos], ['/admin/reportes', 'Reportes', Reportes], ['/admin/cierre', 'Cierre de caja', Cierre]]],
-  ['Tienda web', [['/admin/banners', 'Ofertas', Megaphone], ['/admin/negocio', 'Negocio', Store]]],
-  ['Administración', [['/admin/usuarios', 'Usuarios y permisos', UsersRound]]],
+  ['Contabilidad', [['/admin/compras', 'Compras', Truck], ['/admin/gastos', 'Gastos', Wallet], ['/admin/costos', 'Costos y márgenes', Costos], ['/admin/reportes', 'Reportes', Reportes], ['/admin/cierre', 'Cierre de caja', Cierre]]],
+  ['Tienda web', [['/admin/banners', 'Promociones', Megaphone], ['/admin/negocio', 'Configuración', Store]]],
+  ['Administración', [['/admin/usuarios', 'Usuarios y roles', UsersRound]]],
 ];
 const CLAVE = ['/admin/clave', 'Clave', KeyRound];
 const LINKS = [...GRUPOS.flatMap(([, l]) => l), CLAVE];
@@ -42,6 +42,11 @@ export default function Shell({ children }) {
   const [usuarioSesion, setUsuarioSesion] = useState(null);
   const [permisosSesion, setPermisosSesion] = useState([]);
   const saliendo = useRef(false);
+  const tira = useRef(null);
+  useEffect(() => {
+    const el = tira.current?.querySelector('[aria-current="page"]');
+    if (el) el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }, [path, ok, usuarioSesion]);
   const exacto = ['/admin', '/admin/ventas'];
   const on = (href) => (exacto.includes(href) ? path === href : path.startsWith(href));
   const actual = LINKS.find(([h]) => on(h));
@@ -318,7 +323,7 @@ export default function Shell({ children }) {
     );
   }
 
-  const tab = (a) => `flex flex-1 flex-col items-center gap-0.5 py-1.5 text-[11px] font-semibold ${a ? 'text-vino-800' : 'text-stone-500'}`;
+  const tab = (a) => `flex flex-1 flex-col items-center gap-0.5 px-0.5 py-1.5 text-center text-[10px] font-semibold leading-tight ${a ? 'text-vino-800' : 'text-stone-500'}`;
   const pillNueva = 'relative -mt-5 grid h-12 w-12 place-items-center rounded-full bg-oro-400 text-vino-950 shadow-lift ring-4 ring-white';
   const pill = (a) => `grid h-7 w-12 place-items-center rounded-full transition ${a ? 'bg-vino-100' : ''}`;
   const item = (a) => `flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${a ? 'bg-oro-400 text-vino-950 shadow-sm' : 'text-vino-100 hover:bg-white/10'}`;
@@ -326,12 +331,8 @@ export default function Shell({ children }) {
   return (
     <div className="admin min-h-screen bg-panel">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col overflow-y-auto bg-vino-950 p-5 text-white md:flex">
-        <div className="mb-7 flex items-center gap-3">
+        <div className="mb-7 flex items-center justify-center">
           <Marca N={marca} />
-          <div className="min-w-0">
-            <p className="truncate font-brand text-lg font-extrabold leading-none">{marca.nombre}</p>
-            <p className="mt-1 text-xs text-vino-200">Panel de administración</p>
-          </div>
         </div>
         <div className="space-y-5">
           {gruposVisibles.map(([g, links]) => (
@@ -359,10 +360,6 @@ export default function Shell({ children }) {
         <div className="flex min-w-0 items-center gap-2.5 md:hidden">
           <button type="button" onClick={() => setMas(true)} aria-label="Abrir menú" className="-ml-1 grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-white/10"><MenuIcon size={22} /></button>
           <span className="shrink-0 [&>*]:!h-8 [&>*]:!w-8 [&>*]:!text-base"><Marca N={marca} /></span>
-          <div className="min-w-0 leading-tight">
-            <p className="truncate font-serif text-base font-extrabold">{actual ? actual[1] : 'Admin'}</p>
-            <p className="truncate font-brand text-xs font-bold text-oro-300">{marca.nombre}</p>
-          </div>
         </div>
         <div className="flex items-center gap-1">
           {puedeVerPermiso('notificaciones.ver') && (
@@ -376,6 +373,16 @@ export default function Shell({ children }) {
           <a href="/api/admin/logout" onClick={salir} aria-label="Salir" className="grid h-9 w-9 place-items-center rounded-full hover:bg-white/10 md:hidden"><LogOut size={18} /></a>
         </div>
       </header>
+
+      <div className="sticky top-[62px] z-20 border-b border-stone-200 bg-white md:hidden">
+        <nav ref={tira} aria-label="Módulos" className="flex snap-x gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {gruposVisibles.flatMap(([, links]) => links).map(([href, t]) => (
+            <Link key={href} href={href} aria-current={on(href) ? 'page' : undefined} className={`shrink-0 snap-center whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${on(href) ? 'bg-vino-800 text-oro-200 ring-1 ring-oro-400' : 'bg-stone-100 text-stone-600'}`}>
+              {t}
+            </Link>
+          ))}
+        </nav>
+      </div>
 
       <div className="md:pl-64">
         <div className="mx-auto max-w-5xl pb-28 pt-2 md:pb-10">{children}</div>
@@ -402,7 +409,6 @@ export default function Shell({ children }) {
             <div className="mb-6 flex items-center justify-between">
               <div className="flex min-w-0 items-center gap-3">
                 <Marca N={marca} />
-                <p className="truncate font-brand text-lg font-extrabold leading-none">{marca.nombre}</p>
               </div>
               <button type="button" onClick={() => setMas(false)} aria-label="Cerrar menú" className="grid h-9 w-9 shrink-0 place-items-center rounded-full hover:bg-white/10"><X size={20} /></button>
             </div>
