@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Package, ShoppingCart, Tags, Megaphone, Store, KeyRound, LogOut, ExternalLink, Wallet, X, Plus, Menu as MenuIcon } from 'lucide-react';
 import { UsersRound, Truck } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { puedeAbrirRuta } from '@/lib/rutas-admin';
 import Marca from '@/components/Marca';
 import Avisos from '@/components/Avisos';
@@ -42,11 +43,9 @@ export default function Shell({ children }) {
   const [usuarioSesion, setUsuarioSesion] = useState(null);
   const [permisosSesion, setPermisosSesion] = useState([]);
   const saliendo = useRef(false);
-  const tira = useRef(null);
-  useEffect(() => {
-    const el = tira.current?.querySelector('[aria-current="page"]');
-    if (el) el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-  }, [path, ok, usuarioSesion]);
+  const [extra, setExtra] = useState({});
+  const abierto = (g, links) => links.length === 1 || (g in extra ? extra[g] : links.some(([h]) => on(h)));
+  const alternar = (g, links) => setExtra((e) => ({ ...e, [g]: !(g in e ? e[g] : links.some(([h]) => on(h))) }));
   const exacto = ['/admin', '/admin/ventas'];
   const on = (href) => (exacto.includes(href) ? path === href : path.startsWith(href));
   const actual = LINKS.find(([h]) => on(h));
@@ -332,13 +331,16 @@ export default function Shell({ children }) {
     <div className="admin min-h-screen bg-panel">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col overflow-y-auto bg-vino-950 p-5 text-white md:flex">
         <div className="mb-7 flex items-center justify-center">
-          <Marca N={marca} />
+          <Marca N={marca} horizontal />
         </div>
         <div className="space-y-5">
           {gruposVisibles.map(([g, links]) => (
             <div key={g}>
-              <p className="mb-1.5 px-4 text-[11px] font-bold uppercase tracking-widest text-vino-300">{g}</p>
-              <nav className="space-y-0.5">
+              <button type="button" onClick={() => alternar(g, links)} aria-expanded={abierto(g, links)} disabled={links.length === 1} className="mb-1.5 flex w-full items-center justify-between rounded-lg px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-vino-300 enabled:hover:bg-white/5 disabled:cursor-default">
+                {g}
+                {links.length > 1 && <ChevronLeft size={15} className={`transition-transform ${abierto(g, links) ? '-rotate-90' : ''}`} />}
+              </button>
+              <nav className={`space-y-0.5 ${abierto(g, links) ? '' : 'hidden'}`}>
                 {links.map(([href, t, Icon]) => (
                   <Link key={href} href={href} aria-current={on(href) ? 'page' : undefined} className={item(on(href))}>
                     <Icon size={18} /> {t}
@@ -359,7 +361,7 @@ export default function Shell({ children }) {
       <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-oro-400 bg-vino-950 px-4 py-2.5 text-white md:fixed md:right-5 md:top-3 md:z-40 md:w-auto md:border-0 md:bg-transparent md:p-0">
         <div className="flex min-w-0 items-center gap-2.5 md:hidden">
           <button type="button" onClick={() => setMas(true)} aria-label="Abrir menú" className="-ml-1 grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-white/10"><MenuIcon size={22} /></button>
-          <span className="shrink-0 [&>*]:!h-8 [&>*]:!w-8 [&>*]:!text-base"><Marca N={marca} /></span>
+          <Marca N={marca} horizontal />
         </div>
         <div className="flex items-center gap-1">
           {puedeVerPermiso('notificaciones.ver') && (
@@ -374,15 +376,6 @@ export default function Shell({ children }) {
         </div>
       </header>
 
-      <div className="sticky top-[62px] z-20 border-b border-stone-200 bg-white md:hidden">
-        <nav ref={tira} aria-label="Módulos" className="flex snap-x gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {gruposVisibles.flatMap(([, links]) => links).map(([href, t]) => (
-            <Link key={href} href={href} aria-current={on(href) ? 'page' : undefined} className={`shrink-0 snap-center whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${on(href) ? 'bg-vino-800 text-oro-200 ring-1 ring-oro-400' : 'bg-stone-100 text-stone-600'}`}>
-              {t}
-            </Link>
-          ))}
-        </nav>
-      </div>
 
       <div className="md:pl-64">
         <div className="mx-auto max-w-5xl pb-28 pt-2 md:pb-10">{children}</div>
@@ -408,15 +401,18 @@ export default function Shell({ children }) {
           <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85%] flex-col overflow-y-auto bg-vino-950 p-5 text-white shadow-lift">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex min-w-0 items-center gap-3">
-                <Marca N={marca} />
+                <Marca N={marca} horizontal />
               </div>
               <button type="button" onClick={() => setMas(false)} aria-label="Cerrar menú" className="grid h-9 w-9 shrink-0 place-items-center rounded-full hover:bg-white/10"><X size={20} /></button>
             </div>
             <div className="space-y-5">
               {gruposVisibles.map(([g, links]) => (
                 <div key={g}>
-                  <p className="mb-1.5 px-4 text-[11px] font-bold uppercase tracking-widest text-vino-300">{g}</p>
-                  <nav className="space-y-0.5">
+                  <button type="button" onClick={() => alternar(g, links)} aria-expanded={abierto(g, links)} disabled={links.length === 1} className="mb-1.5 flex w-full items-center justify-between rounded-lg px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-vino-300 enabled:hover:bg-white/5 disabled:cursor-default">
+                    {g}
+                    {links.length > 1 && <ChevronLeft size={15} className={`transition-transform ${abierto(g, links) ? '-rotate-90' : ''}`} />}
+                  </button>
+                  <nav className={`space-y-0.5 ${abierto(g, links) ? '' : 'hidden'}`}>
                     {links.map(([href, t, Icon]) => (
                       <Link key={href} href={href} aria-current={on(href) ? 'page' : undefined} className={item(on(href))}>
                         <Icon size={18} /> {t}
