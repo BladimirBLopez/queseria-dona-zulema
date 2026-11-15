@@ -1,8 +1,9 @@
 'use client';
 import { confirmar, avisar, avisoAuto } from '@/lib/avisos';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import useSWR from 'swr';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Search, Plus, Pencil, Trash2, X, ImagePlus, Lock } from 'lucide-react';
+import { Search, Plus, Pencil, Trash2, X, ImagePlus } from 'lucide-react';
 import ProductoForm from '@/components/ProductoForm';
 import { errMsg } from '@/lib/cliente';
 import { admiteDecimales } from '@/lib/unidades';
@@ -40,10 +41,6 @@ function Switch({ on, onClick }) {
 }
 
 export default function Admin() {
-  const [auth, setAuth] = useState(null);
-  const [pw, setPw] = useState('');
-  const [err, setErr] = useState('');
-  const [data, setData] = useState({ productos: [], categorias: [] });
   const [f, setF] = useState(null);
   const [busy, setBusy] = useState(false);
   const [q, setQ] = useState('');
@@ -53,24 +50,15 @@ export default function Admin() {
 
   const aviso = avisoAuto;
 
-  async function cargar() {
-    try {
-      const r = await fetch('/api/admin/productos');
-      if (r.status === 401) return setAuth(false);
-      setData(await r.json());
-      setAuth(true);
-    } catch { aviso('Sin conexión'); }
-  }
-  useEffect(() => { cargar(); }, []);
-
-  async function login(e) {
-    e.preventDefault();
-    setErr('');
-    const r = await fetch('/api/admin/login', { method: 'POST', body: JSON.stringify({ password: pw }) });
-    if (r.ok) { window.dispatchEvent(new Event('admin-auth')); cargar(); }
-    else setErr(r.status === 429 ? 'Demasiados intentos. Espera unos minutos.' : 'Clave incorrecta');
-  }
-
+  const SIN_DATOS = { productos: [], categorias: [] };
+  const { data: datos, isLoading, mutate } = useSWR('/api/admin/productos', async (u) => {
+    const r = await fetch(u);
+    if (r.status === 401) { location.href = '/admin'; return new Promise(() => {}); }
+    if (!r.ok) throw new Error('error');
+    return r.json();
+  }, { revalidateOnFocus: true, keepPreviousData: true });
+  const data = datos || SIN_DATOS;
+  const cargar = () => mutate();
   async function subir(file) {
     if (!file) return;
     if (file.size > 8 * 1024 * 1024) return aviso('La foto pesa más de 8 MB');
@@ -145,23 +133,6 @@ export default function Admin() {
     if (lista.length === 1) return editar(lista[0]);
     if (lista.length === 0) return setF({ ...vacio, codigo: t });
   }
-
-  if (auth === null) return <p className="p-8 text-center text-stone-500">Cargando...</p>;
-
-  if (!auth) return (
-    <div className="grid min-h-screen place-items-center bg-gradient-to-br from-vino-950 via-vino-900 to-vino-700 p-4">
-      <form onSubmit={login} className="w-full max-w-sm space-y-4 rounded-3xl bg-white p-7 shadow-lift">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-vino-800 text-oro-300"><Lock size={24} /></div>
-        <div className="text-center">
-          <h1 className="font-serif text-2xl font-extrabold text-vino-800">Panel de administración</h1>
-          <p className="text-sm text-stone-500">Ingresa tu clave para continuar</p>
-        </div>
-        <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Clave" autoFocus />
-        <button className="w-full rounded-full bg-vino-800 py-3 font-bold text-white transition hover:bg-vino-700">Entrar</button>
-        {err && <p className="text-center text-sm text-red-600">{err}</p>}
-      </form>
-    </div>
-  );
 
   const vis = data.productos.filter((p) => p.disponible).length;
   const stats = [['Productos', data.productos.length, 'text-vino-800'], ['Visibles', vis, 'text-green-600'], ['Ocultos', data.productos.length - vis, 'text-stone-500']];
