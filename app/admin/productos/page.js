@@ -172,6 +172,15 @@ export default function Admin() {
       </div>
 
       <ul className="space-y-3">
+        {isLoading && [0, 1, 2, 3].map((i) => (
+          <li key={'sk' + i} className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-card">
+            <div className="h-16 w-16 shrink-0 animate-pulse rounded-xl bg-stone-200" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-2/3 animate-pulse rounded bg-stone-200" />
+              <div className="h-3 w-1/3 animate-pulse rounded bg-stone-200" />
+            </div>
+          </li>
+        ))}
         {lista.map((p) => (
           <li key={p.id} className={`flex items-center gap-3 rounded-2xl bg-white p-3 shadow-card ${p.disponible ? '' : 'opacity-70'}`}>
             <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-vino-50">
@@ -193,7 +202,7 @@ export default function Admin() {
             </div>
           </li>
         ))}
-        {lista.length === 0 && <li className="py-12 text-center text-stone-500">No hay productos con ese filtro.</li>}
+        {!isLoading && lista.length === 0 && <li className="py-12 text-center text-stone-500">No hay productos con ese filtro.</li>}
       </ul>
 
       <AnimatePresence>
@@ -230,7 +239,7 @@ export default function Admin() {
               <input type="number" inputMode={admiteDecimales(st.p.unidad) ? 'decimal' : 'numeric'} step={admiteDecimales(st.p.unidad) ? 'any' : '1'} min="0" value={st.cant} onChange={(e) => setSt({ ...st, cant: e.target.value })} autoFocus />
             </label>
             {st.modo === 'merma' && <p className="text-xs text-stone-500">Queda registrado como pérdida (producto dañado o vencido) y baja el stock.</p>}
-            <button onClick={guardarStock} disabled={busy} className="w-full rounded-full bg-vino-800 py-3 font-bold text-white disabled:opacity-50">{busy ? 'Guardando...' : 'Guardar stock'}</button>
+            <button onClick={guardarStock} disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-full bg-vino-800 py-3 font-bold text-white disabled:opacity-50">{busy && <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />}{busy ? 'Guardando...' : 'Guardar stock'}</button>
           </div>
         </div>
       )}
