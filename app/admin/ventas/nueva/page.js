@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Search, Plus, Minus, X, Trash2, Check, MessageCircle, ArrowLeft, ChevronDown } from 'lucide-react';
+import useSWR from 'swr';
 import { api, errMsg } from '@/lib/cliente';
 import { avisar } from '@/lib/avisos';
 import Escaner from '@/components/Escaner';
@@ -83,13 +84,22 @@ function Teclado({ onKey }) {
   );
 }
 
+const SIN = [];
+const fetcher = async (u) => {
+  const r = await fetch(u);
+  if (r.status === 401) { location.href = '/admin'; return null; }
+  if (!r.ok) throw new Error('http_' + r.status);
+  return r.json();
+};
 const stop = (e) => e.stopPropagation();
 const chip = (a) => `shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${a ? 'bg-vino-800 text-white' : 'bg-white text-stone-600 ring-1 ring-stone-200'}`;
 const mini = (a) => `rounded-full px-4 py-2 text-sm font-bold transition ${a ? 'bg-vino-800 text-white' : 'bg-white text-stone-700 ring-1 ring-stone-300'}`;
 
 export default function NuevaVenta() {
-  const [productos, setProductos] = useState(null);
-  const [negocio, setNegocio] = useState('');
+  const { data: dp, mutate: mutProd } = useSWR('/api/admin/productos', fetcher);
+  const { data: dn } = useSWR('/api/admin/identidad', fetcher);
+  const productos = dp ? dp.productos || SIN : null;
+  const negocio = dn?.nombre || '';
   const [clientes, setClientes] = useState([]);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('todas');
@@ -112,10 +122,7 @@ export default function NuevaVenta() {
 
   useEffect(() => {
     (async () => {
-      const [pr, ng, vs] = await Promise.all([api('/api/admin/productos'), api('/api/admin/identidad'), api('/api/admin/ventas')]);
-      const lista = pr.data?.productos || [];
-      setProductos(lista);
-      setNegocio(ng.data?.nombre || '');
+      const vs = await api('/api/admin/ventas');
       setF((x) => ({ ...x, metodo: guardado() }));
       const mapa = new Map();
       for (const v of Array.isArray(vs.data) ? vs.data : []) {
@@ -129,7 +136,8 @@ export default function NuevaVenta() {
       setClientes([...mapa.values()].slice(0, 100));
       const pid = new URLSearchParams(location.search).get('pedido');
       if (pid) {
-        const pe = await api('/api/admin/pedidos?estado=pendiente');
+        const [pr, pe] = await Promise.all([api('/api/admin/productos'), api('/api/admin/pedidos?estado=pendiente')]);
+        const lista = pr.data?.productos || [];
         const ped = (Array.isArray(pe.data) ? pe.data : []).find((x) => String(x.id) === pid);
         if (ped) {
           setPedidoId(ped.id);
@@ -147,8 +155,7 @@ export default function NuevaVenta() {
   }, []);
 
   async function recargar() {
-    const r = await api('/api/admin/productos');
-    if (r.ok) setProductos(r.data?.productos || []);
+    await mutProd();
   }
 
   const categorias = useMemo(() => [...new Set((productos || []).map((p) => p.categoria).filter(Boolean))], [productos]);
@@ -341,7 +348,11 @@ export default function NuevaVenta() {
     recargar();
   }
 
-  if (!productos) return <p className="p-8 text-center text-stone-500">Cargando...</p>;
+  if (!productos) return (
+    <div className="space-y-3 p-4">
+      {[0, 1, 2, 3, 4].map((i) => <div key={i} className="h-16 animate-pulse rounded-2xl bg-stone-200" />)}
+    </div>
+  );
 
   if (hecho) {
     return (
